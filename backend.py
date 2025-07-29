@@ -14,7 +14,9 @@ import time
 import numpy as np
 
 app = Flask(__name__)
-CORS(app, resources={r"/predict": {"origins": "http://localhost:3000"}})
+
+# Konfigurasi CORS untuk mendukung semua origin (cocok untuk hosting)
+CORS(app, resources={r"/predict": {"origins": "*"}})  # Izinkan semua origin untuk endpoint /predict
 
 # Setup logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -109,40 +111,48 @@ def predict():
                 logging.error(f"Field '{field}' tidak ditemukan")
                 return jsonify({"error": f"Field '{field}' diperlukan"}), 400
 
-        # Buat DataFrame untuk input
-        input_df = pd.DataFrame([{
-            "Nilai_Matematika": float(input_data["nilai_mat"]),
-            "Nilai_IPA": float(input_data["nilai_ipa"]),
-            "Nilai_Bahasa_Inggris": float(input_data["nilai_ing"]),
-            "Minat": input_data["minat"],
-            "Bakat": input_data["bakat"]
-        }])
+        # Konversi dan validasi input
+        try:
+            nilai_mat = float(input_data["nilai_mat"])
+            nilai_ipa = float(input_data["nilai_ipa"])
+            nilai_ing = float(input_data["nilai_ing"])
+        except ValueError:
+            logging.error("Nilai harus berupa angka")
+            return jsonify({"error": "Nilai harus berupa angka"}), 400
 
-        # Validasi nilai
-        if not (0 <= input_df["Nilai_Matematika"].iloc[0] <= 100 and
-                0 <= input_df["Nilai_IPA"].iloc[0] <= 100 and
-                0 <= input_df["Nilai_Bahasa_Inggris"].iloc[0] <= 100):
+        # Validasi rentang nilai
+        if not (0 <= nilai_mat <= 100 and 0 <= nilai_ipa <= 100 and 0 <= nilai_ing <= 100):
             logging.error("Nilai di luar rentang 0-100")
             return jsonify({"error": "Nilai harus antara 0 dan 100"}), 400
 
         # Validasi kategori
         valid_minat = data["Minat"].unique()
         valid_bakat = data["Bakat"].unique()
-        if input_df["Minat"].iloc[0] not in valid_minat:
-            logging.error(f"Minat tidak valid: {input_df['Minat'].iloc[0]}")
+        if input_data["minat"] not in valid_minat:
+            logging.error(f"Minat tidak valid: {input_data['minat']}")
             return jsonify({"error": f"Minat tidak valid. Pilih dari: {list(valid_minat)}"}), 400
-        if input_df["Bakat"].iloc[0] not in valid_bakat:
-            logging.error(f"Bakat tidak valid: {input_df['Bakat'].iloc[0]}")
+        if input_data["bakat"] not in valid_bakat:
+            logging.error(f"Bakat tidak valid: {input_data['bakat']}")
             return jsonify({"error": f"Bakat tidak valid. Pilih dari: {list(valid_bakat)}"}), 400
+
+        # Siapkan data untuk prediksi
+        input_df = pd.DataFrame([{
+            "Nilai_Matematika": nilai_mat,
+            "Nilai_IPA": nilai_ipa,
+            "Nilai_Bahasa_Inggris": nilai_ing,
+            "Minat": input_data["minat"],
+            "Bakat": input_data["bakat"]
+        }])
 
         # Prediksi
         pred = best_model.predict(input_df)
         jurusan = pred[0]
 
-        # Dapatkan probabilitas prediksi
+        # Dapatkan probabilitas
         probas = best_model.predict_proba(input_df)[0]
         max_proba = np.max(probas)
-        logging.info(f"Prediksi: {jurusan}, Akurasi: {accuracy * 100:.2f}%, Probabilitas: {max_proba:.4f}")
+
+        logging.info(f"Prediksi: {jurusan}, Akurasi: {accuracy * 100:.2f}%, Probabilitas: {max_proba * 100:.2f}")
 
         return jsonify({
             "jurusan": jurusan,
@@ -154,4 +164,4 @@ def predict():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run(debug=True, host='0.0.0.0', port=5000)
