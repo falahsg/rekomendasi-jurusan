@@ -27,7 +27,7 @@ export default function Home() {
 
     try {
       const response = await axios.post(
-        "http://103.150.92.168/:5000/predict",
+        "http://103.150.92.168:5000/predict",
         {
           nilai_mat: parseFloat(formData.nilai_mat),
           nilai_ipa: parseFloat(formData.nilai_ipa),
