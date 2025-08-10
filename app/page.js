@@ -26,13 +26,16 @@ export default function Home() {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:5000/predict", {
-        nilai_mat: parseFloat(formData.nilai_mat),
-        nilai_ipa: parseFloat(formData.nilai_ipa),
-        nilai_ing: parseFloat(formData.nilai_ing),
-        minat: formData.minat,
-        bakat: formData.bakat,
-      });
+      const response = await axios.post(
+        "http://103.150.92.168/:5000/predict",
+        {
+          nilai_mat: parseFloat(formData.nilai_mat),
+          nilai_ipa: parseFloat(formData.nilai_ipa),
+          nilai_ing: parseFloat(formData.nilai_ing),
+          minat: formData.minat,
+          bakat: formData.bakat,
+        }
+      );
       setResult(response.data);
     } catch (err) {
       setError(
