@@ -45,118 +45,128 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-700 to-blue-500 flex items-center justify-center p-4">
-      <div className="max-w-lg w-full bg-white rounded-2xl shadow-xl p-8 space-y-6">
-        <h1 className="text-3xl font-bold text-center text-gray-800">
-          Rekomendasi Jurusan
+    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-700 to-blue-500 flex items-center justify-center p-6">
+      <div className="max-w-lg w-full bg-white/20 backdrop-blur-lg rounded-3xl shadow-2xl p-8 space-y-6 border border-white/30 animate-fade-in">
+        <h1 className="text-4xl font-extrabold text-center text-white drop-shadow-lg">
+          🎓 Rekomendasi Jurusan
         </h1>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5">
+          {[
+            { label: "Nilai Matematika", name: "nilai_mat" },
+            { label: "Nilai IPA", name: "nilai_ipa" },
+            { label: "Nilai Bahasa Inggris", name: "nilai_ing" },
+          ].map((field) => (
+            <div key={field.name}>
+              <label className="block text-sm font-semibold text-white drop-shadow">
+                {field.label}
+              </label>
+              <input
+                type="number"
+                name={field.name}
+                value={formData[field.name]}
+                onChange={handleChange}
+                required
+                className="mt-1 block w-full px-4 py-3 border border-white/40 rounded-xl bg-white/30 text-white placeholder-white/70 shadow-inner focus:ring-4 focus:ring-blue-300 focus:border-white outline-none transition"
+                placeholder="Masukkan nilai (0-100)"
+              />
+            </div>
+          ))}
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Nilai Matematika
-            </label>
-            <input
-              type="number"
-              name="nilai_mat"
-              value={formData.nilai_mat}
-              onChange={handleChange}
-              required
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Masukkan nilai (0-100)"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Nilai IPA
-            </label>
-            <input
-              type="number"
-              name="nilai_ipa"
-              value={formData.nilai_ipa}
-              onChange={handleChange}
-              required
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Masukkan nilai (0-100)"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Nilai Bahasa Inggris
-            </label>
-            <input
-              type="number"
-              name="nilai_ing"
-              value={formData.nilai_ing}
-              onChange={handleChange}
-              required
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Masukkan nilai (0-100)"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-semibold text-white drop-shadow">
               Minat
             </label>
-            <select
-              name="minat"
-              value={formData.minat}
-              onChange={handleChange}
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option value="Teknologi">Teknologi</option>
-              <option value="Kesehatan">Kesehatan</option>
-              <option value="Sosial">Sosial</option>
-              <option value="Seni">Seni</option>
-              <option value="Bisnis">Bisnis</option>
-            </select>
+            <div className="relative">
+              <select
+                name="minat"
+                value={formData.minat}
+                onChange={handleChange}
+                className="w-full px-4 py-3 rounded-lg border border-white/30 bg-white/10 backdrop-blur-md text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-blue-300 appearance-none"
+              >
+                <option className="text-gray-800" value="Teknologi">
+                  Teknologi
+                </option>
+                <option className="text-gray-800" value="Kesehatan">
+                  Kesehatan
+                </option>
+                <option className="text-gray-800" value="Sosial">
+                  Sosial
+                </option>
+                <option className="text-gray-800" value="Seni">
+                  Seni
+                </option>
+                <option className="text-gray-800" value="Bisnis">
+                  Bisnis
+                </option>
+              </select>
+
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-white pointer-events-none">
+                ▼
+              </span>
+            </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-semibold text-white drop-shadow">
               Bakat
             </label>
-            <select
-              name="bakat"
-              value={formData.bakat}
-              onChange={handleChange}
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option value="Komunikatif">Komunikatif</option>
-              <option value="Analitis">Analitis</option>
-              <option value="Praktis">Praktis</option>
-              <option value="Kreatif">Kreatif</option>
-            </select>
+            <div className="relative">
+              <select
+                name="bakat"
+                value={formData.bakat}
+                onChange={handleChange}
+                className="w-full px-4 py-3 rounded-lg border border-white/30 bg-white/10 backdrop-blur-md text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-blue-300 appearance-none"
+              >
+                <option className="text-gray-800" value="Komunikatif">
+                  Komunikatif
+                </option>
+                <option className="text-gray-800" value="Analitis">
+                  Analitis
+                </option>
+                <option className="text-gray-800" value="Praktis">
+                  Praktis
+                </option>
+                <option className="text-gray-800" value="Kreatif">
+                  Kreatif
+                </option>
+              </select>
+
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-white pointer-events-none">
+                ▼
+              </span>
+            </div>
           </div>
           <button
             type="submit"
             disabled={loading}
-            className={`w-full py-3 px-4 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-300 ${
+            className={`w-full py-3 px-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold rounded-xl shadow-lg hover:scale-[1.02] focus:ring-4 focus:ring-blue-300 transition transform duration-300 ${
               loading ? "opacity-50 cursor-not-allowed" : ""
             }`}
           >
-            {loading ? "Memproses..." : "Prediksi Jurusan"}
+            {loading ? "Memproses..." : "🚀 Prediksi Jurusan"}
           </button>
         </form>
 
         {error && (
-          <div className="p-4 bg-red-100 text-red-700 rounded-lg text-center">
+          <div className="p-4 bg-red-500/80 text-white rounded-lg text-center shadow-md animate-fade-in">
             {error}
           </div>
         )}
 
         {result && (
-          <div className="p-6 bg-blue-50 rounded-lg shadow-inner text-center space-y-2 animate-fade-in">
-            <h2 className="text-2xl font-semibold text-gray-800">
+          <div className="p-6 bg-white/30 rounded-xl shadow-inner text-center space-y-2 animate-fade-in border border-white/40">
+            <h2 className="text-2xl font-bold text-white drop-shadow">
               Hasil Prediksi
             </h2>
-            <p className="text-lg">
+            <p className="text-lg text-white">
               <span className="font-medium">Jurusan:</span>{" "}
-              <span className="text-blue-600">{result.jurusan}</span>
+              <span className="text-yellow-300 font-semibold">
+                {result.jurusan}
+              </span>
             </p>
-            <p className="text-lg">
+            <p className="text-lg text-white">
               <span className="font-medium">Akurasi:</span>{" "}
               {result.akurasi.toFixed(2)}%
             </p>
-            <p className="text-lg">
+            <p className="text-lg text-white">
               <span className="font-medium">Probabilitas:</span>{" "}
               {result.probabilitas.toFixed(2)}%
             </p>
@@ -168,7 +178,7 @@ export default function Home() {
         @keyframes fade-in {
           from {
             opacity: 0;
-            transform: translateY(10px);
+            transform: translateY(15px);
           }
           to {
             opacity: 1;

@@ -15,7 +15,7 @@ import numpy as np
 
 app = Flask(__name__)
 
-# Konfigurasi CORS untuk mendukung semua origin (cocok untuk hosting)
+# Konfigurasi CORS untuk mendukung semua origin
 CORS(app, resources={r"/predict": {"origins": "*"}})  # Izinkan semua origin untuk endpoint /predict
 
 # Setup logging
